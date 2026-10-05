@@ -1,0 +1,65 @@
+# memeify settings. Every key is optional; delete one to get its default.
+
+camera:               # the real camera memeify reads from
+  name: null          # null = the camera you last picked in the app (else the first real one), or e.g. "USB2.0 HD UVC WebCam"
+  width: 1280         # what to ask the camera for; it may give something else
+  height: 720
+  fps: 30
+  mirror: false       # flip horizontally before anything else (meeting apps mirror your self-view already)
+  backend: auto       # auto | dshow | msmf | v4l2 | avfoundation | any
+  fourcc: MJPG        # set to null if your camera shows a black or garbled picture
+
+tracking:
+  pose_model: lite    # lite (fast) | full (more accurate, slower)
+  process_width: 640  # frames are shrunk to this width for the pose model; lower = faster
+  min_detection_confidence: 0.5
+  min_visibility: 0.5
+  object_model: lite0 # object detector: lite0 (fast) | lite2 (better at small objects, ~3x slower)
+  object_score: 0.3   # how sure the detector must be. Lower = sees more, but more mistakes
+  # What counts as a throwable object. Names must match the detector's 80 COCO categories
+  # (see README). Big or background things like chairs and laptops are left out on purpose.
+  object_classes: [
+    broccoli, carrot, banana, apple, orange, sandwich, hot dog, pizza, donut, cake,
+    bottle, wine glass, cup, bowl, fork, spoon,
+    cell phone, remote, mouse, book, clock, vase, toothbrush, hair drier,
+    sports ball, frisbee, teddy bear, baseball bat, baseball glove, tennis racket,
+  ]
+  touch_margin: 0.2   # how close (in shoulder widths) an object must be to your hand to count as held
+  models_dir: models  # MediaPipe models are downloaded here on first run (~11 MB)
+
+gesture:
+  # A throw = object in your hand -> wrist flies up past the shoulder line -> hand seen without the object.
+  # Speeds are in shoulder-widths per second, so they don't depend on how far you sit from the camera.
+  wrist_speed_threshold: 2.5   # how fast the wrist must move upward. Lower = easier to trigger
+  hold_frames: 2               # frames the object must be seen on your hand before a throw can start
+  hold_memory: 0.6             # seconds the object is remembered when the detector loses it (motion blur)
+  release_frames: 3            # frames your hand must be seen empty after the swing. Higher = fewer false booms
+  release_window: 0.7          # seconds after the swing within which your hand must be seen empty
+  cooldown: 3.0                # seconds after a boom before another can fire
+  velocity_window: 0.1         # seconds of wrist motion used to measure speed
+
+explosion:
+  scale: 1.0          # 1.0 = about 70% of the frame height
+  lead_time: 0.25     # seconds to project the thrown object forward from the release point
+  edge_margin: 0.2    # keeps the target this far from the frame edges (fraction of short side)
+  drop: 0.05          # places the explosion this much lower than the target (fraction of its height). 0 = centred
+  behind_person: true # true = you stay in front of the explosion; false = blended over everything
+  asset_dir: assets/explosion   # PNG sequence with alpha; falls back to a built-in placeholder
+  fps: null           # playback speed; null = read fps.txt from asset_dir (written by the converter), else 30
+
+sound:
+  enabled: true
+  file: null          # null = first .wav/.ogg/.mp3 in assets/
+  volume: 0.8
+
+output:                       # the "memeify" camera that Zoom / Meet / OBS see
+  width: 1280                 # its picture size; any input camera is fitted (cropped) to this
+  height: 720
+  fps: 30
+  virtual_camera: auto        # auto = memeify camera, else OBS's if installed | memeify | obs | off
+  virtual_camera_device: null # override the device name. Linux: e.g. /dev/video10
+
+hotkeys:
+  pause: p                        # toggle detection (memeify window focused)
+  test_boom: b                    # fire an explosion by hand to check the effect
+  global_pause: "<ctrl>+<alt>+b"  # toggle detection from any app, e.g. while Zoom is focused. null = off

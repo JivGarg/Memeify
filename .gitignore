@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# Tests and tooling output
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# MediaPipe models, downloaded on first run (and partial downloads)
+models/
+*.part
+
+# Recordings and test footage (yours, personal, large)
+recordings/
+clips/
+samples/
+test-media/
+scratch/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+
+# Debug dumps: snapshots, contact sheets, analysis caches
+snapshots/
+debug/
+*.pkl
+
+# Per-machine data: remembered camera pick and window choices, logs, local env
+.memeify-state.json
+*.log
+.env
+.env.*
+
+# Editors / OS / assistants
+.vscode/
+.idea/
+.claude/
+.DS_Store
+Thumbs.db
+desktop.ini

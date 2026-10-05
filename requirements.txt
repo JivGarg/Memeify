@@ -1,0 +1,16 @@
+# Runtime dependencies, pinned. Python 3.10-3.14, 64-bit.
+mediapipe==1.0.1
+# MediaPipe depends on the contrib build of OpenCV. Don't also install opencv-python:
+# both provide the same cv2 module and break each other.
+opencv-contrib-python==5.0.0.93
+numpy==2.4.6; python_version >= "3.11"
+numpy==2.2.6; python_version < "3.11"
+pyvirtualcam==0.15.0
+# pygame-ce is a maintained drop-in fork of pygame (still `import pygame`) with wheels for Python 3.10-3.14.
+pygame-ce==2.5.8
+PyYAML==6.0.3
+# Only used by `python -m memeify.convert` to read animated GIF / WebP files.
+pillow==12.3.0
+pynput==1.8.2
+# Lists cameras by name (without opening them) for the camera picker.
+cv2-enumerate-cameras==1.4.0
